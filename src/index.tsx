@@ -6,23 +6,7 @@ import './index.css';
 import 'antd/dist/antd.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import configureStore from './store/configureStore';
-
-const preloadedState = {
-  todos: [
-    {
-      text: 'Eat food',
-      completed: true,
-    },
-    {
-      text: 'Exercise',
-      completed: false,
-    },
-  ],
-  visibilityFilter: 'SHOW_COMPLETED',
-}
-
-const store = configureStore({ preloadedState });
+import store from './store';
 
 const renderApp = () => ReactDOM.render(
   <React.StrictMode>
