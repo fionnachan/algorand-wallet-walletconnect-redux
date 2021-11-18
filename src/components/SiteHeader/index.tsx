@@ -4,15 +4,19 @@ import { Layout, Button } from 'antd';
 import { ellipseAddress, formatBigNumWithDecimals } from '../../helpers/utilities';
 import { IAssetData } from '../../helpers/types';
 import { useDispatch, useSelector } from 'react-redux';
-import { reset, walletConnectInit, setConnected, onConnect, onSessionUpdate, killSession, selectConnector, selectAssets, selectAddress, getAccountAssets, selectChain } from '../../features/walletConnectSlice';
+import { reset, setConnected, onConnect, onSessionUpdate, killSession, selectConnector, selectAssets, selectAddress, getAccountAssets, selectChain, setAddress } from '../../features/walletConnectSlice';
 import WalletConnect from '@walletconnect/client';
+import { setIsModalOpen } from '../../features/applicationSlice';
+import { myAlgoConnect, selectMyAlgoAccounts, selectMyAlgoConnector } from '../../features/myAlgoSlice';
 
 const { Header } = Layout;
 
 const SiteHeader: React.FC = () => {
   const connector = useSelector(selectConnector);
+  const myAlgoConnector = useSelector(selectMyAlgoConnector);
   const assets = useSelector(selectAssets);
   const address = useSelector(selectAddress);
+  const myAlgoAccounts = useSelector(selectMyAlgoAccounts);
   const chain = useSelector(selectChain);
   const nativeCurrency = assets && assets.find((asset: IAssetData) => asset && asset.id === 0) || {
     id: 0,
@@ -35,10 +39,15 @@ const SiteHeader: React.FC = () => {
         connector.createSession();
       }
       const { accounts } = connector;
+      dispatch(setIsModalOpen(false));
       dispatch(setConnected(true));
       dispatch(onSessionUpdate(accounts));   
     }
-  }, [connector]);
+    if (myAlgoConnector) {
+      dispatch(setIsModalOpen(false));
+      dispatch(myAlgoConnect(myAlgoConnector));
+    }
+  }, [connector, myAlgoConnector]);
 
   useEffect(() => {
     // Check if connection is already established
@@ -49,6 +58,15 @@ const SiteHeader: React.FC = () => {
       dispatch(getAccountAssets({chain, address}));
     }
   }, [address]);
+
+  useEffect(() => {
+    if (myAlgoAccounts && myAlgoAccounts.length > 0) {
+      console.log("myAlgoAccounts", myAlgoAccounts[0])
+      const address = myAlgoAccounts[0] && myAlgoAccounts[0].address;
+      dispatch(setAddress(address));
+      dispatch(getAccountAssets({chain, address}));
+    }
+  }, [myAlgoAccounts]);
 
   const subscribeToEvents = (connector: WalletConnect) => {
     console.log("%cin subscribeToEvents", "background: yellow")
@@ -86,8 +104,8 @@ const SiteHeader: React.FC = () => {
     <Header className="site-layout-background site-header">
       <span>Connected to {chain}</span>
       {!address ?
-        <Button onClick={() => dispatch(walletConnectInit())}>
-          {"Connect to WalletConnect"}
+        <Button onClick={() => dispatch(setIsModalOpen(true))}>
+          {"Connect Wallet"}
         </Button>
       : <div className="header-address-info">
           <span>

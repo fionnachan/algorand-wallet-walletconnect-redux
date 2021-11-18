@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@json-rpc-tools/utils": "^1.7.6",
+    "@randlabs/myalgo-connect": "^1.1.1",
     "@reduxjs/toolkit": "^1.6.2",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",

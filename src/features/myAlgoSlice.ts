@@ -1,16 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import WalletConnect from "@walletconnect/client";
 import QRCodeModal from "algorand-walletconnect-qrcode-modal";
+import MyAlgo, { Accounts } from "@randlabs/myalgo-connect";
 import { apiGetAccountAssets, ChainType } from "../helpers/api";
 import { IAssetData } from "../helpers/types";
 
-interface WalletConnectState {
+interface MyAlgoState {
   chain: ChainType,
-  accounts: string[],
+  accounts: Accounts[],
   address: string,
   assets: IAssetData[],
   connected: boolean,
-  connector: WalletConnect | null
+  connector: MyAlgo | null
 }
 
 const initialState = {
@@ -20,16 +20,20 @@ const initialState = {
   connected: false,
   connector: null,
   chain: ChainType.TestNet
-} as WalletConnectState;
+} as MyAlgoState;
 
-export const getAccountAssets = createAsyncThunk("walletConnect/getAccountAssets", async (accountData: {chain: ChainType, address: string}) => {
-  const { chain, address } = accountData;
-  const response = apiGetAccountAssets(chain, address)
-  return response;
+export const myAlgoConnect = createAsyncThunk("myAlgo/connect", async (connector: MyAlgo) => {
+  return await connector.connect()
+    .then((accounts) => {
+      return accounts;
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 })
 
-export const walletConnectSlice = createSlice({
-    name: 'walletConnect',
+export const myAlgoSlice = createSlice({
+    name: 'myAlgo',
     initialState,
     reducers: {
       switchChain(state, action) {
@@ -43,18 +47,13 @@ export const walletConnectSlice = createSlice({
         state.connector = null;
         console.log("reset state", state)
       },
-      walletConnectInit: state => {
+      myAlgoInit: state => {
         // Create a connector
-        state.connector = new WalletConnect({
-          bridge: "https://bridge.walletconnect.org",
-          qrcodeModal: QRCodeModal,
-        });
+        const connector = new MyAlgo();
+        state.connector = connector;
       },
       setConnected: (state, action) => {
         state.connected = action.payload;
-      },
-      setAddress: (state, action) => {
-        state.address = action.payload;
       },
       onConnect: (state, action) =>  {
         const { accounts } = action.payload.params[0];
@@ -70,30 +69,33 @@ export const walletConnectSlice = createSlice({
       },
       killSession: state => {
         if (state.connected) {
-          (state.connector as WalletConnect).killSession();
         }
       }
     },
     extraReducers(builder) {
-      builder.addCase(getAccountAssets.fulfilled, (state, action) => {
-        state.assets = action.payload;
+      builder.addCase(myAlgoConnect.fulfilled, (state, action) => {
+        console.log("action in extra reduc", action);
+        state.accounts = action.payload as Accounts[];
+        if (action.payload) {
+          state.address = (action.payload as Accounts[])[0].address;
+        }
       })
     }
 });
 
-export const selectChain = (state: any) => state.walletConnect && state.walletConnect.chain;
-export const selectConnector = (state: any) => state.walletConnect && state.walletConnect.connector;
-export const selectAssets = (state: any) => state.walletConnect && state.walletConnect.assets;
-export const selectAddress = (state: any) => state.walletConnect && state.walletConnect.address;
+export const selectChain = (state: any) => state.myAlgo && state.myAlgo.chain;
+export const selectMyAlgoConnector = (state: any) => state.myAlgo && state.myAlgo.connector;
+export const selectAssets = (state: any) => state.myAlgo && state.myAlgo.assets;
+export const selectMyAlgoAccounts = (state: any) => state.myAlgo && state.myAlgo.accounts;
+export const selectAddress = (state: any) => state.myAlgo && state.myAlgo.address;
 
 export const {
   reset,
-  walletConnectInit,
+  myAlgoInit,
   setConnected,
-  setAddress,
   onConnect,
   onSessionUpdate,
   killSession
-} = walletConnectSlice.actions;
+} = myAlgoSlice.actions;
 
-export default walletConnectSlice.reducer;
+export default myAlgoSlice.reducer;
