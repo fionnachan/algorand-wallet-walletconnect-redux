@@ -1,23 +1,23 @@
 {
   "files": {
-    "main.css": "/static/css/main.845aea86.chunk.css",
-    "main.js": "/static/js/main.2cb07648.chunk.js",
-    "main.js.map": "/static/js/main.2cb07648.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.8035cfcc.js",
-    "runtime-main.js.map": "/static/js/runtime-main.8035cfcc.js.map",
-    "static/js/2.7dfededd.chunk.js": "/static/js/2.7dfededd.chunk.js",
-    "static/js/2.7dfededd.chunk.js.map": "/static/js/2.7dfededd.chunk.js.map",
-    "static/js/3.7790d86b.chunk.js": "/static/js/3.7790d86b.chunk.js",
-    "static/js/3.7790d86b.chunk.js.map": "/static/js/3.7790d86b.chunk.js.map",
-    "index.html": "/index.html",
-    "static/css/main.845aea86.chunk.css.map": "/static/css/main.845aea86.chunk.css.map",
-    "static/js/2.7dfededd.chunk.js.LICENSE.txt": "/static/js/2.7dfededd.chunk.js.LICENSE.txt",
-    "static/media/algo.ecbc85e5.svg": "/static/media/algo.ecbc85e5.svg"
+    "main.css": "/algorand-wallet-walletconnect-redux/static/css/main.845aea86.chunk.css",
+    "main.js": "/algorand-wallet-walletconnect-redux/static/js/main.398de4ba.chunk.js",
+    "main.js.map": "/algorand-wallet-walletconnect-redux/static/js/main.398de4ba.chunk.js.map",
+    "runtime-main.js": "/algorand-wallet-walletconnect-redux/static/js/runtime-main.d0836238.js",
+    "runtime-main.js.map": "/algorand-wallet-walletconnect-redux/static/js/runtime-main.d0836238.js.map",
+    "static/js/2.7dfededd.chunk.js": "/algorand-wallet-walletconnect-redux/static/js/2.7dfededd.chunk.js",
+    "static/js/2.7dfededd.chunk.js.map": "/algorand-wallet-walletconnect-redux/static/js/2.7dfededd.chunk.js.map",
+    "static/js/3.7790d86b.chunk.js": "/algorand-wallet-walletconnect-redux/static/js/3.7790d86b.chunk.js",
+    "static/js/3.7790d86b.chunk.js.map": "/algorand-wallet-walletconnect-redux/static/js/3.7790d86b.chunk.js.map",
+    "index.html": "/algorand-wallet-walletconnect-redux/index.html",
+    "static/css/main.845aea86.chunk.css.map": "/algorand-wallet-walletconnect-redux/static/css/main.845aea86.chunk.css.map",
+    "static/js/2.7dfededd.chunk.js.LICENSE.txt": "/algorand-wallet-walletconnect-redux/static/js/2.7dfededd.chunk.js.LICENSE.txt",
+    "static/media/algo.ecbc85e5.svg": "/algorand-wallet-walletconnect-redux/static/media/algo.ecbc85e5.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.8035cfcc.js",
+    "static/js/runtime-main.d0836238.js",
     "static/js/2.7dfededd.chunk.js",
     "static/css/main.845aea86.chunk.css",
-    "static/js/main.2cb07648.chunk.js"
+    "static/js/main.398de4ba.chunk.js"
   ]
 }
