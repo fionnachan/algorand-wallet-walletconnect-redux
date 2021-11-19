@@ -2,6 +2,7 @@
   "name": "algorand-wallet-walletconnect-redux",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://fionnachan.github.io/algorand-wallet-walletconnect-redux/",
   "dependencies": {
     "@json-rpc-tools/utils": "^1.7.6",
     "@reduxjs/toolkit": "^1.6.2",

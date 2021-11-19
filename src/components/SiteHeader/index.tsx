@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
-
+import { useDispatch, useSelector } from 'react-redux';
+import WalletConnect from '@walletconnect/client';
 import { Button, Select } from 'evergreen-ui';
+
 import { ellipseAddress, formatBigNumWithDecimals } from '../../helpers/utilities';
 import { IAssetData } from '../../helpers/types';
-import { useDispatch, useSelector } from 'react-redux';
 import { reset, setConnected, onConnect, onSessionUpdate, killSession, selectConnector, selectAssets, selectAddress, getAccountAssets, selectChain, selectConnected, walletConnectInit, switchChain, setFetching, selectFetching } from '../../features/walletConnectSlice';
-import WalletConnect from '@walletconnect/client';
 import { setIsModalOpen } from '../../features/applicationSlice';
 import { ChainType } from '../../helpers/api';
 
