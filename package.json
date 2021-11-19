@@ -1,5 +1,5 @@
 {
-  "name": "algorand-wallet-connector",
+  "name": "algorand-wallet-walletconnect-redux",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

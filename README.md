@@ -1,5 +1,5 @@
 # Redux Example: Connect to Algorand Wallet via WalletConnect
-![Demo](https://github.com/fionnachan/algorand-wallet-connect/blob/master/demo.png)
+![Demo](https://github.com/fionnachan/algorand-wallet-walletconnect-redux/blob/main/demo.png)
 ### Features
 - connect to the web app using the official Algorand Wallet via WalletConnect
 - switch between Testnet and Mainnet
@@ -10,7 +10,7 @@
 
 ### Local Development
 - Clone this repository
-`git clone https://github.com/fionnachan/algorand-wallet-connect.git`
+`git clone https://github.com/fionnachan/algorand-wallet-walletconnect-redux.git`
 
 - Install dependencies
 `yarn`
@@ -26,7 +26,7 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 To learn Redux, check out the [Redux documentation](https://redux.js.org/).
 
 ### License
-This project is under an MIT License. See the [LICENSE](https://github.com/fionnachan/algorand-wallet-connect/blob/master/LICENSE) file for details.
+This project is under an MIT License. See the [LICENSE](https://github.com/fionnachan/algorand-wallet-walletconnect-redux/blob/main/LICENSE) file for details.
 
 ### Disclaimer
 This project is not audited and should not be used in a production environment.
