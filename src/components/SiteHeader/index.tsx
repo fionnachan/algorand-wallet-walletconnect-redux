@@ -1,21 +1,19 @@
 import React, { useEffect } from 'react';
 
-import { Button } from 'evergreen-ui';
+import { Button, Select } from 'evergreen-ui';
 import { ellipseAddress, formatBigNumWithDecimals } from '../../helpers/utilities';
 import { IAssetData } from '../../helpers/types';
 import { useDispatch, useSelector } from 'react-redux';
-import { reset, setConnected, onConnect, onSessionUpdate, killSession, selectConnector, selectAssets, selectAddress, getAccountAssets, selectChain, setAddress, selectConnected } from '../../features/walletConnectSlice';
+import { reset, setConnected, onConnect, onSessionUpdate, killSession, selectConnector, selectAssets, selectAddress, getAccountAssets, selectChain, selectConnected, walletConnectInit, switchChain } from '../../features/walletConnectSlice';
 import WalletConnect from '@walletconnect/client';
 import { setIsModalOpen } from '../../features/applicationSlice';
-import { myAlgoConnect, selectMyAlgoAccounts, selectMyAlgoConnector } from '../../features/myAlgoSlice';
+import { ChainType } from '../../helpers/api';
 
 const SiteHeader: React.FC = () => {
   const connector = useSelector(selectConnector);
   const connected = useSelector(selectConnected);
-  const myAlgoConnector = useSelector(selectMyAlgoConnector);
   const assets = useSelector(selectAssets);
   const address = useSelector(selectAddress);
-  const myAlgoAccounts = useSelector(selectMyAlgoAccounts);
   const chain = useSelector(selectChain);
   const nativeCurrency = assets && assets.find((asset: IAssetData) => asset && asset.id === 0) || {
     id: 0,
@@ -30,6 +28,12 @@ const SiteHeader: React.FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (window.localStorage.getItem("walletconnect") != null) {
+      dispatch(walletConnectInit());
+    }
+  }, []);
+
+  useEffect(() => {
     if (connected) {
       dispatch(setIsModalOpen(false));
     }
@@ -37,37 +41,24 @@ const SiteHeader: React.FC = () => {
 
   useEffect(() => {
     // Check if connection is already established
-    if (connector || myAlgoConnector) {
-      dispatch(setConnected(true));
-    }
     if (connector) {
       subscribeToEvents(connector);
+      dispatch(setConnected(true));
       if (!connector.connected) {
         connector.createSession();
       }
       const { accounts } = connector;
       dispatch(onSessionUpdate(accounts));   
     }
-    if (myAlgoConnector) {
-      dispatch(myAlgoConnect(myAlgoConnector));
-    }
-  }, [connector, myAlgoConnector]);
+  }, [connector]);
 
   useEffect(() => {
     // Check if connection is already established
     if (connector && address && address.length > 0) {
+      console.log("chain: ", chain)
       dispatch(getAccountAssets({chain, address}));
     }
-  }, [address]);
-
-  useEffect(() => {
-    if (myAlgoAccounts && myAlgoAccounts.length > 0) {
-      console.log("myAlgoAccounts", myAlgoAccounts[0])
-      const address = myAlgoAccounts[0] && myAlgoAccounts[0].address;
-      dispatch(setAddress(address));
-      dispatch(getAccountAssets({chain, address}));
-    }
-  }, [myAlgoAccounts]);
+  }, [address, chain]);
 
   const subscribeToEvents = (connector: WalletConnect) => {
     console.log("%cin subscribeToEvents", "background: yellow")
@@ -104,7 +95,20 @@ const SiteHeader: React.FC = () => {
   return (
     <div className="site-layout-background site-header">
       <div className="site-header-inner">
-        <span>Connected to {chain}</span>
+        <div>
+          <span>Connected to </span>
+          <Select
+            defaultValue={ChainType.TestNet}
+            onChange={event => dispatch(switchChain((event.target as HTMLSelectElement).value))}
+            >
+            <option value={ChainType.TestNet}>
+              Testnet
+            </option>
+            <option value={ChainType.MainNet}>
+              Mainnet
+            </option>
+          </Select>
+        </div>
         {!address ?
           <Button onClick={() => dispatch(setIsModalOpen(true))}>
             {"Connect Wallet"}
