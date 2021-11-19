@@ -13,5 +13,5 @@ code {
 }
 
 * {
-  animation-duration: 0s !important;
+  box-sizing: border-box;
 }

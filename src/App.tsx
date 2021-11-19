@@ -6,6 +6,7 @@ import SiteHeader from './components/SiteHeader';
 import { walletConnectInit } from './features/walletConnectSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsModalOpen, setIsModalOpen } from './features/applicationSlice';
+import SiteBody from './components/SiteBody';
 
 const App: React.FC = () => {
   const isModalOpen = useSelector(selectIsModalOpen);
@@ -15,7 +16,8 @@ const App: React.FC = () => {
     <div style={{ minHeight: '100vh' }}>
       <div className="site-layout">
         <SiteHeader/>
-        <div className="site-body"></div>
+        <SiteBody/>
+        <div className="footer">Made with 💖 by <a href="https://github.com/fionnachan" target="_blank">@fionnachan</a></div>
         <Dialog
           isShown={isModalOpen}
           title="Connect to a wallet"
