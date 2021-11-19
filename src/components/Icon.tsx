@@ -6,6 +6,7 @@ const Icon = (props: any) => {
     <img
       {...props}
       src={src}
+      alt="icon"
       className="icon"
       onError={(event: any) => {
         if (fallback) {

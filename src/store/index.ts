@@ -1,7 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 import walletConnectReducer from '../features/walletConnectSlice';
 import applicationReducer from '../features/applicationSlice';
-import { ChainType } from '../helpers/api';
 
 const store = configureStore({
   reducer: {

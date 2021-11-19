@@ -16,7 +16,7 @@ const SiteHeader: React.FC = () => {
   const assets = useSelector(selectAssets);
   const address = useSelector(selectAddress);
   const chain = useSelector(selectChain);
-  const nativeCurrency = assets && assets.find((asset: IAssetData) => asset && asset.id === 0) || {
+  const nativeCurrency = assets && assets.find((asset: IAssetData) => asset && asset.id === 0) || { // eslint-disable-line react-hooks/exhaustive-deps
     id: 0,
     amount: BigInt(0),
     creator: "",
@@ -32,13 +32,13 @@ const SiteHeader: React.FC = () => {
     if (window.localStorage.getItem("walletconnect") != null) {
       dispatch(walletConnectInit());
     }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (connected) {
       dispatch(setIsModalOpen(false));
     }
-  }, [connected]);
+  }, [connected]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     // Check if connection is already established
@@ -51,7 +51,7 @@ const SiteHeader: React.FC = () => {
       const { accounts } = connector;
       dispatch(onSessionUpdate(accounts));   
     }
-  }, [connector]);
+  }, [connector]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     // Check if connection is already established
@@ -60,11 +60,11 @@ const SiteHeader: React.FC = () => {
       dispatch(getAccountAssets({chain, address}));
       dispatch(setFetching(true));
     }
-  }, [address, chain]);
+  }, [address, chain]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     dispatch(setFetching(false));
-  }, [assets]);
+  }, [assets]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const subscribeToEvents = (connector: WalletConnect) => {
     console.log("%cin subscribeToEvents", "background: yellow")

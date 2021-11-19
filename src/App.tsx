@@ -17,7 +17,12 @@ const App: React.FC = () => {
       <div className="site-layout">
         <SiteHeader/>
         <SiteBody/>
-        <div className="footer">Made with 💖 by <a href="https://github.com/fionnachan" target="_blank">@fionnachan</a></div>
+        <div className="footer">Made with 💖 by <a
+            href="https://github.com/fionnachan"
+            target="_blank"
+            rel="noreferrer"
+          >@fionnachan</a>
+        </div>
         <Dialog
           isShown={isModalOpen}
           title="Connect to a wallet"
@@ -25,7 +30,7 @@ const App: React.FC = () => {
           onCloseComplete={() => dispatch(setIsModalOpen(false))}
         >
           <Button className="wallet-button" onClick={() => dispatch(walletConnectInit())}>
-            <img className="wallet-icon" src="/wallet/algorandwallet.svg"/>
+            <img className="wallet-icon" src="/wallet/algorandwallet.svg" alt="Algorand wallet"/>
             <span>Algorand Wallet</span>
           </Button>
         </Dialog>
