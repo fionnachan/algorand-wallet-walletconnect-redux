@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/algorand-wallet-walletconnect-redux/static/css/main.845aea86.chunk.css",
-    "main.js": "/algorand-wallet-walletconnect-redux/static/js/main.398de4ba.chunk.js",
-    "main.js.map": "/algorand-wallet-walletconnect-redux/static/js/main.398de4ba.chunk.js.map",
+    "main.js": "/algorand-wallet-walletconnect-redux/static/js/main.0df1f322.chunk.js",
+    "main.js.map": "/algorand-wallet-walletconnect-redux/static/js/main.0df1f322.chunk.js.map",
     "runtime-main.js": "/algorand-wallet-walletconnect-redux/static/js/runtime-main.d0836238.js",
     "runtime-main.js.map": "/algorand-wallet-walletconnect-redux/static/js/runtime-main.d0836238.js.map",
     "static/js/2.7dfededd.chunk.js": "/algorand-wallet-walletconnect-redux/static/js/2.7dfededd.chunk.js",
@@ -12,12 +12,13 @@
     "index.html": "/algorand-wallet-walletconnect-redux/index.html",
     "static/css/main.845aea86.chunk.css.map": "/algorand-wallet-walletconnect-redux/static/css/main.845aea86.chunk.css.map",
     "static/js/2.7dfededd.chunk.js.LICENSE.txt": "/algorand-wallet-walletconnect-redux/static/js/2.7dfededd.chunk.js.LICENSE.txt",
-    "static/media/algo.ecbc85e5.svg": "/algorand-wallet-walletconnect-redux/static/media/algo.ecbc85e5.svg"
+    "static/media/algo.ecbc85e5.svg": "/algorand-wallet-walletconnect-redux/static/media/algo.ecbc85e5.svg",
+    "static/media/algorandwallet.37675b59.svg": "/algorand-wallet-walletconnect-redux/static/media/algorandwallet.37675b59.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.d0836238.js",
     "static/js/2.7dfededd.chunk.js",
     "static/css/main.845aea86.chunk.css",
-    "static/js/main.398de4ba.chunk.js"
+    "static/js/main.0df1f322.chunk.js"
   ]
 }
