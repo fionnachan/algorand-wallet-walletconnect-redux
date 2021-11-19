@@ -1,10 +1,10 @@
 import React from 'react';
 import { Button, Dialog } from 'evergreen-ui';
+import { useDispatch, useSelector } from 'react-redux';
 
 import './App.css';
 import SiteHeader from './components/SiteHeader';
 import { walletConnectInit } from './features/walletConnectSlice';
-import { useDispatch, useSelector } from 'react-redux';
 import { selectIsModalOpen, setIsModalOpen } from './features/applicationSlice';
 import SiteBody from './components/SiteBody';
 
@@ -13,7 +13,7 @@ const App: React.FC = () => {
   const dispatch = useDispatch();
 
   return (
-    <div style={{ minHeight: '100vh' }}>
+    <div>
       <div className="site-layout">
         <SiteHeader/>
         <SiteBody/>
