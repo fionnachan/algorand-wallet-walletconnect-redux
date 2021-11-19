@@ -1,4 +1,3 @@
-import * as React from "react";
 import AssetRow from "./AssetRow";
 import { IAssetData } from "../helpers/types";
 

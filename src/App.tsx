@@ -7,6 +7,7 @@ import SiteHeader from './components/SiteHeader';
 import { walletConnectInit } from './features/walletConnectSlice';
 import { selectIsModalOpen, setIsModalOpen } from './features/applicationSlice';
 import SiteBody from './components/SiteBody';
+import algowallet from "./assets/algorandwallet.svg";
 
 const App: React.FC = () => {
   const isModalOpen = useSelector(selectIsModalOpen);
@@ -30,7 +31,7 @@ const App: React.FC = () => {
           onCloseComplete={() => dispatch(setIsModalOpen(false))}
         >
           <Button className="wallet-button" onClick={() => dispatch(walletConnectInit())}>
-            <img className="wallet-icon" src="/wallet/algorandwallet.svg" alt="Algorand wallet"/>
+            <img className="wallet-icon" src={algowallet} alt="Algorand wallet"/>
             <span>Algorand Wallet</span>
           </Button>
         </Dialog>
