@@ -1,18 +1,17 @@
 import React, { useEffect } from 'react';
 
-import { Layout, Button } from 'antd';
+import { Button } from 'evergreen-ui';
 import { ellipseAddress, formatBigNumWithDecimals } from '../../helpers/utilities';
 import { IAssetData } from '../../helpers/types';
 import { useDispatch, useSelector } from 'react-redux';
-import { reset, setConnected, onConnect, onSessionUpdate, killSession, selectConnector, selectAssets, selectAddress, getAccountAssets, selectChain, setAddress } from '../../features/walletConnectSlice';
+import { reset, setConnected, onConnect, onSessionUpdate, killSession, selectConnector, selectAssets, selectAddress, getAccountAssets, selectChain, setAddress, selectConnected } from '../../features/walletConnectSlice';
 import WalletConnect from '@walletconnect/client';
 import { setIsModalOpen } from '../../features/applicationSlice';
 import { myAlgoConnect, selectMyAlgoAccounts, selectMyAlgoConnector } from '../../features/myAlgoSlice';
 
-const { Header } = Layout;
-
 const SiteHeader: React.FC = () => {
   const connector = useSelector(selectConnector);
+  const connected = useSelector(selectConnected);
   const myAlgoConnector = useSelector(selectMyAlgoConnector);
   const assets = useSelector(selectAssets);
   const address = useSelector(selectAddress);
@@ -31,29 +30,31 @@ const SiteHeader: React.FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (connected) {
+      dispatch(setIsModalOpen(false));
+    }
+  }, [connected]);
+
+  useEffect(() => {
     // Check if connection is already established
+    if (connector || myAlgoConnector) {
+      dispatch(setConnected(true));
+    }
     if (connector) {
       subscribeToEvents(connector);
-
       if (!connector.connected) {
         connector.createSession();
       }
       const { accounts } = connector;
-      dispatch(setIsModalOpen(false));
-      dispatch(setConnected(true));
       dispatch(onSessionUpdate(accounts));   
     }
     if (myAlgoConnector) {
-      dispatch(setIsModalOpen(false));
       dispatch(myAlgoConnect(myAlgoConnector));
     }
   }, [connector, myAlgoConnector]);
 
   useEffect(() => {
     // Check if connection is already established
-    console.log("in address useEffect")
-    console.log("connector", connector)
-    console.log("address", address)
     if (connector && address && address.length > 0) {
       dispatch(getAccountAssets({chain, address}));
     }
@@ -87,8 +88,8 @@ const SiteHeader: React.FC = () => {
       if (error) {
         throw error;
       }
-      const { connectedAccounts } = payload.params[0];
-      dispatch(onSessionUpdate(connectedAccounts));
+      const { accounts } = payload.params[0];
+      dispatch(onSessionUpdate(accounts));
     });
     
     connector.on("disconnect", (error, payload) => {
@@ -101,25 +102,27 @@ const SiteHeader: React.FC = () => {
   }
 
   return (
-    <Header className="site-layout-background site-header">
-      <span>Connected to {chain}</span>
-      {!address ?
-        <Button onClick={() => dispatch(setIsModalOpen(true))}>
-          {"Connect Wallet"}
-        </Button>
-      : <div className="header-address-info">
-          <span>
-            {formatBigNumWithDecimals(nativeCurrency.amount, nativeCurrency.decimals)} {nativeCurrency.unitName || "units"}
-          </span>
-          <span className="header-account">{ellipseAddress(address)}</span>
-          <Button
-            className="disconnect-button"
-            onClick={() => dispatch(killSession())}
-          >
-            {"Disconnect"}
+    <div className="site-layout-background site-header">
+      <div className="site-header-inner">
+        <span>Connected to {chain}</span>
+        {!address ?
+          <Button onClick={() => dispatch(setIsModalOpen(true))}>
+            {"Connect Wallet"}
           </Button>
+        : <div className="header-address-info">
+            <span>
+              {formatBigNumWithDecimals(nativeCurrency.amount, nativeCurrency.decimals)} {nativeCurrency.unitName || "units"}
+            </span>
+            <span className="header-account">{ellipseAddress(address)}</span>
+            <Button
+              className="disconnect-button"
+              onClick={() => dispatch(killSession())}
+            >
+              {"Disconnect"}
+            </Button>
         </div>}
-    </Header>
+      </div>
+    </div>
   );
 }
 

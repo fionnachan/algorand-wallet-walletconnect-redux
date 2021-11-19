@@ -52,21 +52,6 @@ export const myAlgoSlice = createSlice({
         const connector = new MyAlgo();
         state.connector = connector;
       },
-      setConnected: (state, action) => {
-        state.connected = action.payload;
-      },
-      onConnect: (state, action) =>  {
-        const { accounts } = action.payload.params[0];
-        state.accounts = accounts;
-        state.address = accounts[0];
-      },
-      onSessionUpdate: (state, action) => {
-        state.accounts = action.payload;
-        state.address = action.payload[0];
-      },
-      setAccountAssets: (state, action) => {
-        state.assets = action.payload;
-      },
       killSession: state => {
         if (state.connected) {
         }
@@ -85,16 +70,12 @@ export const myAlgoSlice = createSlice({
 
 export const selectChain = (state: any) => state.myAlgo && state.myAlgo.chain;
 export const selectMyAlgoConnector = (state: any) => state.myAlgo && state.myAlgo.connector;
-export const selectAssets = (state: any) => state.myAlgo && state.myAlgo.assets;
 export const selectMyAlgoAccounts = (state: any) => state.myAlgo && state.myAlgo.accounts;
 export const selectAddress = (state: any) => state.myAlgo && state.myAlgo.address;
 
 export const {
   reset,
   myAlgoInit,
-  setConnected,
-  onConnect,
-  onSessionUpdate,
   killSession
 } = myAlgoSlice.actions;
 

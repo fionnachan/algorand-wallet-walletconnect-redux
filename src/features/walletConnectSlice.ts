@@ -82,6 +82,7 @@ export const walletConnectSlice = createSlice({
 });
 
 export const selectChain = (state: any) => state.walletConnect && state.walletConnect.chain;
+export const selectConnected = (state: any) => state.walletConnect && state.walletConnect.connected;
 export const selectConnector = (state: any) => state.walletConnect && state.walletConnect.connector;
 export const selectAssets = (state: any) => state.walletConnect && state.walletConnect.assets;
 export const selectAddress = (state: any) => state.walletConnect && state.walletConnect.address;
