@@ -1,5 +1,5 @@
 # Redux Example: Connect to Algorand Wallet via WalletConnect
-![Demo](https://github.com/fionnachan/algorand-wallet-walletconnect-redux/blob/main/demo.png)
+![Demo](https://github.com/fionnachan/algorand-wallet-walletconnect-redux/blob/main/demo.gif)
 ### Features
 - connect to the web app using the official Algorand Wallet via WalletConnect
 - switch between Testnet and Mainnet
