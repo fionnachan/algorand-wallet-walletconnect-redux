@@ -1,15 +1,20 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectAssets } from '../../features/walletConnectSlice';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { selectAssets, selectFetching } from '../../features/walletConnectSlice';
 import AccountAssets from '../AccountAssets';
+import LoadingIcon from '../LoadingIcon';
 
 const SiteBody: React.FC = () => {
   const assets = useSelector(selectAssets);
+  const loading = useSelector(selectFetching);
 
   return (
     <div className="site-body">
       <div className="site-body-inner">
-        <AccountAssets assets={assets}/>
+        {loading ? 
+          <LoadingIcon/>
+          : <AccountAssets assets={assets}/>
+        }
       </div>
     </div>
   )

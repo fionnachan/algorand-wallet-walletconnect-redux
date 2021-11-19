@@ -19,6 +19,7 @@ const AccountAssets = (props: { assets: IAssetData[] }) => {
 
   return (
     <div>
+      <h2>Account Balance</h2>
       <AssetRow key={nativeCurrency.id} asset={nativeCurrency} />
       {tokens.map(token => (
         <AssetRow key={token.id} asset={token} />

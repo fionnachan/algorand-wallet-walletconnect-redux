@@ -10,7 +10,8 @@ interface WalletConnectState {
   address: string,
   assets: IAssetData[],
   connected: boolean,
-  connector: WalletConnect | null
+  connector: WalletConnect | null,
+  fetching: boolean,
 }
 
 const initialState = {
@@ -19,7 +20,8 @@ const initialState = {
   assets: [],
   connected: false,
   connector: null,
-  chain: ChainType.TestNet
+  chain: ChainType.TestNet,
+  fetching: false,
 } as WalletConnectState;
 
 export const getAccountAssets = createAsyncThunk("walletConnect/getAccountAssets", async (accountData: {chain: ChainType, address: string}) => {
@@ -32,9 +34,13 @@ export const walletConnectSlice = createSlice({
     name: 'walletConnect',
     initialState,
     reducers: {
+      setFetching(state, action) {
+        console.log("setFetching: ", action.payload)
+        state.fetching = action.payload;
+      },
       switchChain(state, action) {
         console.log("switchChain chain: ", action.payload)
-        state.chain = action.payload
+        state.chain = action.payload;
       },
       reset: state => {
         state.accounts = [];
@@ -79,6 +85,7 @@ export const walletConnectSlice = createSlice({
     }
 });
 
+export const selectFetching = (state: any) => state.walletConnect && state.walletConnect.fetching;
 export const selectChain = (state: any) => state.walletConnect && state.walletConnect.chain;
 export const selectConnected = (state: any) => state.walletConnect && state.walletConnect.connected;
 export const selectConnector = (state: any) => state.walletConnect && state.walletConnect.connector;
@@ -86,6 +93,7 @@ export const selectAssets = (state: any) => state.walletConnect && state.walletC
 export const selectAddress = (state: any) => state.walletConnect && state.walletConnect.address;
 
 export const {
+  setFetching,
   switchChain,
   reset,
   walletConnectInit,

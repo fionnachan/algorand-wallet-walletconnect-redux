@@ -4,12 +4,13 @@ import { Button, Select } from 'evergreen-ui';
 import { ellipseAddress, formatBigNumWithDecimals } from '../../helpers/utilities';
 import { IAssetData } from '../../helpers/types';
 import { useDispatch, useSelector } from 'react-redux';
-import { reset, setConnected, onConnect, onSessionUpdate, killSession, selectConnector, selectAssets, selectAddress, getAccountAssets, selectChain, selectConnected, walletConnectInit, switchChain } from '../../features/walletConnectSlice';
+import { reset, setConnected, onConnect, onSessionUpdate, killSession, selectConnector, selectAssets, selectAddress, getAccountAssets, selectChain, selectConnected, walletConnectInit, switchChain, setFetching, selectFetching } from '../../features/walletConnectSlice';
 import WalletConnect from '@walletconnect/client';
 import { setIsModalOpen } from '../../features/applicationSlice';
 import { ChainType } from '../../helpers/api';
 
 const SiteHeader: React.FC = () => {
+  const loading = useSelector(selectFetching);
   const connector = useSelector(selectConnector);
   const connected = useSelector(selectConnected);
   const assets = useSelector(selectAssets);
@@ -57,8 +58,13 @@ const SiteHeader: React.FC = () => {
     if (connector && address && address.length > 0) {
       console.log("chain: ", chain)
       dispatch(getAccountAssets({chain, address}));
+      dispatch(setFetching(true));
     }
   }, [address, chain]);
+
+  useEffect(() => {
+    dispatch(setFetching(false));
+  }, [assets]);
 
   const subscribeToEvents = (connector: WalletConnect) => {
     console.log("%cin subscribeToEvents", "background: yellow")
@@ -114,9 +120,9 @@ const SiteHeader: React.FC = () => {
             {"Connect Wallet"}
           </Button>
         : <div className="header-address-info">
-            <span>
+            {loading ? null : <span>
               {formatBigNumWithDecimals(nativeCurrency.amount, nativeCurrency.decimals)} {nativeCurrency.unitName || "units"}
-            </span>
+            </span>}
             <span className="header-account">{ellipseAddress(address)}</span>
             <Button
               className="disconnect-button"
