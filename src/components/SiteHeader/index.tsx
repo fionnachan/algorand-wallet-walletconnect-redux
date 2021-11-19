@@ -16,15 +16,18 @@ const SiteHeader: React.FC = () => {
   const assets = useSelector(selectAssets);
   const address = useSelector(selectAddress);
   const chain = useSelector(selectChain);
-  const nativeCurrency = assets && assets.find((asset: IAssetData) => asset && asset.id === 0) || { // eslint-disable-line react-hooks/exhaustive-deps
-    id: 0,
-    amount: BigInt(0),
-    creator: "",
-    frozen: false,
-    decimals: 6,
-    name: "Algo",
-    unitName: "Algo",
-  };
+  let nativeCurrency = assets && assets.find((asset: IAssetData) => asset && asset.id === 0);
+  if (nativeCurrency === undefined || nativeCurrency == null) {
+    nativeCurrency = {
+      id: 0,
+      amount: BigInt(0),
+      creator: "",
+      frozen: false,
+      decimals: 6,
+      name: "Algo",
+      unitName: "Algo",
+    };
+  }
 
   const dispatch = useDispatch();
 
