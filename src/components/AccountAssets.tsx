@@ -4,7 +4,7 @@ import { IAssetData } from "../helpers/types";
 const AccountAssets = (props: { assets: IAssetData[] }) => {
   const { assets } = props;
 
-  const nativeCurrency = assets.find((asset: IAssetData) => asset && asset.id === 0) || {
+  const nativeCurrency = assets?.find((asset) => asset.id === 0) || {
     id: 0,
     amount: BigInt(0),
     creator: "",
@@ -14,7 +14,7 @@ const AccountAssets = (props: { assets: IAssetData[] }) => {
     unitName: "Algo",
   };
 
-  const tokens = assets.filter((asset: IAssetData) => asset && asset.id !== 0);
+  const tokens = assets?.filter((asset) => asset.id !== 0);
 
   return (
     <div>

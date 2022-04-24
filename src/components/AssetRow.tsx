@@ -15,7 +15,9 @@ const AssetRow = (props: { asset: IAssetData }) => {
       </div>
       <div>
         <div>
-          {`${formatBigNumWithDecimals(asset.amount, asset.decimals)} ${asset.unitName || "units"}`}
+          {`${formatBigNumWithDecimals(asset.amount as bigint, asset.decimals)} ${
+            asset.unitName || "units"
+          }`}
         </div>
       </div>
     </div>

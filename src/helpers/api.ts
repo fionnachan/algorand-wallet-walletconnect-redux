@@ -6,8 +6,8 @@ export enum ChainType {
   TestNet = "testnet",
 }
 
-const mainNetClient = new algosdk.Algodv2("", "https://algoexplorerapi.io", "");
-const testNetClient = new algosdk.Algodv2("", "https://testnet.algoexplorerapi.io", "");
+const mainNetClient = new algosdk.Algodv2("", "https://mainnet-api.algonode.cloud", "");
+const testNetClient = new algosdk.Algodv2("", "https://testnet-api.algonode.cloud", "");
 
 function clientForChain(chain: ChainType): algosdk.Algodv2 {
   switch (chain) {
@@ -31,34 +31,41 @@ export async function apiGetAccountAssets(
     .setIntDecoding(algosdk.IntDecoding.BIGINT)
     .do();
 
-  const algoBalance = accountInfo.amount as bigint;
+  const algoBalance = accountInfo.amount.toString();
   const assetsFromRes: Array<{
     "asset-id": bigint;
     amount: bigint;
-    creator: string;
-    frozen: boolean;
+    "is-frozen": boolean;
   }> = accountInfo.assets;
 
-  const assets: IAssetData[] = assetsFromRes.map(({ "asset-id": id, amount, creator, frozen }) => ({
-    id: Number(id),
-    amount,
-    creator,
-    frozen,
-    decimals: 0,
-  }));
+  const assets: IAssetData[] = assetsFromRes.map(
+    ({ "asset-id": id, amount, "is-frozen": frozen }) => ({
+      id: Number(id),
+      amount: amount.toString(),
+      frozen,
+      decimals: 0,
+      creator: "",
+    }),
+  );
 
   assets.sort((a, b) => a.id - b.id);
 
   await Promise.all(
-    assets.map(async asset => {
-      const { params } = await client.getAssetByID(asset.id).do();
-      asset.name = params.name;
-      asset.unitName = params["unit-name"];
-      asset.url = params.url;
-      asset.decimals = params.decimals;
+    assets.map((asset, i) => {
+      return new Promise<void>(async (resolve) => {
+        setTimeout(async () => {
+          const { params } = await client.getAssetByID(asset.id).do();
+          asset.name = params.name;
+          asset.unitName = params["unit-name"];
+          asset.url = params.url;
+          asset.decimals = params.decimals;
+          asset.creator = params.creator;
+          resolve();
+        }, 25 * i);
+      });
     }),
   );
-
+  
   assets.unshift({
     id: 0,
     amount: algoBalance,
@@ -73,9 +80,7 @@ export async function apiGetAccountAssets(
 }
 
 export async function apiGetTxnParams(chain: ChainType): Promise<algosdk.SuggestedParams> {
-  const params = await clientForChain(chain)
-    .getTransactionParams()
-    .do();
+  const params = await clientForChain(chain).getTransactionParams().do();
   return params;
 }
 
@@ -83,9 +88,7 @@ export async function apiSubmitTransactions(
   chain: ChainType,
   stxns: Uint8Array[],
 ): Promise<number> {
-  const { txId } = await clientForChain(chain)
-    .sendRawTransaction(stxns)
-    .do();
+  const { txId } = await clientForChain(chain).sendRawTransaction(stxns).do();
   return await waitForTransaction(chain, txId);
 }
 

@@ -1,23 +1,35 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux'
+import React, { createContext } from "react";
+import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import store from "./store";
+import WalletConnect from "@walletconnect/client";
+import QRCodeModal from "algorand-walletconnect-qrcode-modal";
 
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import store from './store';
+const connectProps = {
+  bridge: "https://bridge.walletconnect.org",
+  qrcodeModal: QRCodeModal,
+};
+let connector = new WalletConnect(connectProps);
+const createConnector = () => (connector = new WalletConnect(connectProps));
+export const ConnectContext = createContext({ connector, createConnector });
 
-const renderApp = () => ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+const renderApp = () =>
+  ReactDOM.render(
+    <React.StrictMode>
+      <Provider store={store}>
+        <ConnectContext.Provider value={{ connector, createConnector }}>
+          <App />
+        </ConnectContext.Provider>
+      </Provider>
+    </React.StrictMode>,
+    document.getElementById("root"),
+  );
 
-if (process.env.NODE_ENV !== 'production' && (module as any).hot) {
-  (module as any).hot.accept('./App', renderApp);
+if (process.env.NODE_ENV !== "production" && (module as any).hot) {
+  (module as any).hot.accept("./App", renderApp);
 }
 
 renderApp();
