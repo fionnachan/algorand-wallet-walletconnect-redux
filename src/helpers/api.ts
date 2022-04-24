@@ -52,7 +52,7 @@ export async function apiGetAccountAssets(
 
   await Promise.all(
     assets.map((asset, i) => {
-      return new Promise<void>(async (resolve) => {
+      return new Promise<void>((resolve) => {
         setTimeout(async () => {
           const { params } = await client.getAssetByID(asset.id).do();
           asset.name = params.name;
@@ -65,7 +65,7 @@ export async function apiGetAccountAssets(
       });
     }),
   );
-  
+
   assets.unshift({
     id: 0,
     amount: algoBalance,

@@ -21,10 +21,8 @@ const initialState = {
 
 export const getAccountAssets = createAsyncThunk(
   "walletConnect/getAccountAssets",
-  async (accountData: { chain: ChainType; address: string }) => {
-    const { chain, address } = accountData;
-    const response = await apiGetAccountAssets(chain, address);
-    return response;
+  async ({ chain, address }: { chain: ChainType; address: string }) => {
+    return await apiGetAccountAssets(chain, address);    
   },
 );
 

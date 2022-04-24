@@ -1,9 +1,15 @@
-const logger = ({ getState }: any) => (next: any) => (action: any) => {
-    if (action.type === "walletConnect/setFetching") {
-      console.log("setFetching: ", action.payload);
-    }
+const logger = ({ getState }: any) => (next: any) => (action: any) => {    
     if (action.type === "walletConnect/switchChain") {
-      console.log("switchChain chain: ", action.payload);
+      console.log("switch chain: ", action.payload);
+    }
+    if (action.type === "walletConnect/getAccountAssets/pending") {
+      console.log("loading assets...");
+    }
+    if (action.type === "walletConnect/getAccountAssets/fulfilled") {
+      console.log("assets sucessfully loaded");
+    }
+    if (action.type === "walletConnect/getAccountAssets/rejected") {
+      console.error(action.error.message);
     }
 
     let result = next(action);
