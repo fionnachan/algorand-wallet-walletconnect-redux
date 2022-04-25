@@ -12,15 +12,14 @@ const connectProps = {
   bridge: "https://bridge.walletconnect.org",
   qrcodeModal: QRCodeModal,
 };
-let connector = new WalletConnect(connectProps);
-const createConnector = () => (connector = new WalletConnect(connectProps));
-export const ConnectContext = createContext({ connector, createConnector });
+const connector = new WalletConnect(connectProps);
+export const ConnectContext = createContext(connector);
 
 const renderApp = () =>
   ReactDOM.render(
     <React.StrictMode>
       <Provider store={store}>
-        <ConnectContext.Provider value={{ connector, createConnector }}>
+        <ConnectContext.Provider value={connector}>
           <App />
         </ConnectContext.Provider>
       </Provider>

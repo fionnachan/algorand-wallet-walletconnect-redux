@@ -18,75 +18,62 @@ const SiteHeader: React.FC = () => {
   const { fetching: loading, address, chain } = useAppSelector((state) => state.walletConnect);
   const assets = useAppSelector(selectAssets);
   const dispatch = useAppDispatch();
-  const { connector } = useContext(ConnectContext);
-
-  useEffect(() => {
-    if (connector) {
-      // Check if connection is already established
-      if (connector.connected) {
-        const { accounts } = connector;
-        dispatch(onSessionUpdate(accounts));
-        dispatch(setIsModalOpen(false));
-      }
-
-      // Subscribe to connection events
-      console.log("%cin subscribeToEvents", "background: yellow");
-      connector.on("connect", (error, payload) => {
-        console.log("%cOn connect", "background: yellow");
-        if (error) {
-          throw error;
-        }
-        const { accounts } = payload.params[0];
-        dispatch(onSessionUpdate(accounts));
-      });
-
-      connector.on("session_update", (error, payload) => {
-        console.log("%cOn session_update", "background: yellow");
-        if (error) {
-          throw error;
-        }
-        const { accounts } = payload.params[0];
-        dispatch(onSessionUpdate(accounts));
-      });
-
-      connector.on("disconnect", (error, payload) => {
-        console.log("%cOn disconnect", "background: yellow");
-        if (error) {
-          throw error;
-        }
-        dispatch(reset());
-      });
-
-      return () => {
-        console.log("%cin unsubscribeFromEvents", "background: yellow");
-        connector.off("connect");
-        connector.off("session_update");
-        connector.off("disconnect");
-      };
-    }
-  }, [dispatch, connector]);
+  const connector = useContext(ConnectContext);
 
   useEffect(() => {
     // Check if connection is already established
-    if (connector && address?.length > 0) {
+    if (connector.connected) {
+      const { accounts } = connector;
+      dispatch(onSessionUpdate(accounts));
+    }
+
+    // Subscribe to connection events
+    console.log("%cin subscribeToEvents", "background: yellow");
+    connector.on("connect", (error, payload) => {
+      console.log("%cOn connect", "background: yellow");
+      if (error) {
+        throw error;
+      }
+      const { accounts } = payload.params[0];
+      dispatch(onSessionUpdate(accounts));
+      dispatch(setIsModalOpen(false));
+    });
+
+    connector.on("session_update", (error, payload) => {
+      console.log("%cOn session_update", "background: yellow");
+      if (error) {
+        throw error;
+      }
+      const { accounts } = payload.params[0];
+      dispatch(onSessionUpdate(accounts));
+    });
+
+    connector.on("disconnect", (error, payload) => {
+      console.log("%cOn disconnect", "background: yellow");
+      if (error) {
+        throw error;
+      }
+      dispatch(reset());
+    });
+
+    return () => {
+      console.log("%cin unsubscribeFromEvents", "background: yellow");
+      connector.off("connect");
+      connector.off("session_update");
+      connector.off("disconnect");
+    };
+  }, [dispatch, connector]);
+
+  useEffect(() => {
+    // Retrieve assets info
+    if (address?.length > 0) {
       console.log("chain: ", chain);
       dispatch(getAccountAssets({ chain, address }));
     }
-  }, [connector, dispatch, address, chain]);
+  }, [dispatch, address, chain]);
 
-  let nativeCurrency = assets?.find((asset: IAssetData) => asset?.id === 0);
-  if (!nativeCurrency) {
-    nativeCurrency = {
-      id: 0,
-      amount: BigInt(0),
-      creator: "",
-      frozen: false,
-      decimals: 6,
-      name: "Algo",
-      unitName: "Algo",
-    };
-  }
-  
+  const nativeCurrency = assets.find((asset: IAssetData) => asset.id === 0)!;
+
   return (
     <div className="site-layout-background site-header">
       <div className="site-header-inner">
@@ -104,7 +91,7 @@ const SiteHeader: React.FC = () => {
           <Button onClick={() => dispatch(setIsModalOpen(true))}>Connect Wallet</Button>
         ) : (
           <div className="header-address-info">
-            {loading ? null : (
+            {!loading && (
               <span>
                 {formatBigNumWithDecimals(nativeCurrency.amount, nativeCurrency.decimals)}{" "}
                 {nativeCurrency.unitName || "units"}

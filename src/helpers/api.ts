@@ -54,12 +54,16 @@ export async function apiGetAccountAssets(
     assets.map((asset, i) => {
       return new Promise<void>((resolve) => {
         setTimeout(async () => {
-          const { params } = await client.getAssetByID(asset.id).do();
-          asset.name = params.name;
-          asset.unitName = params["unit-name"];
-          asset.url = params.url;
-          asset.decimals = params.decimals;
-          asset.creator = params.creator;
+          try {
+            const { params } = await client.getAssetByID(asset.id).do();
+            asset.name = params.name;
+            asset.unitName = params["unit-name"];
+            asset.url = params.url;
+            asset.decimals = params.decimals;
+            asset.creator = params.creator;
+          } catch (error) {
+            console.error("asset:", asset.id, error.message);
+          }
           resolve();
         }, 25 * i);
       });

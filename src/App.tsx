@@ -12,7 +12,7 @@ import { useAppDispatch, useAppSelector } from "./store/hooks";
 const App: React.FC = () => {
   const { isModalOpen } = useAppSelector((state) => state.application);
   const dispatch = useAppDispatch();
-  const { connector } = useContext(ConnectContext);
+  const connector = useContext(ConnectContext);
 
   const connect = async () => {
     if (connector.connected) return;

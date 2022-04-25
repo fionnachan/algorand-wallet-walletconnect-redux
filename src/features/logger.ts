@@ -1,4 +1,10 @@
-const logger = ({ getState }: any) => (next: any) => (action: any) => {    
+import { Dispatch, Middleware, PayloadAction, SerializedError } from "@reduxjs/toolkit";
+import { StoreGetSate } from "../store";
+
+const logger: Middleware =
+  ({ getState }: { getState: StoreGetSate }) =>
+  (next: Dispatch) =>
+  (action: PayloadAction<any, string, any, SerializedError>) => {
     if (action.type === "walletConnect/switchChain") {
       console.log("switch chain: ", action.payload);
     }
