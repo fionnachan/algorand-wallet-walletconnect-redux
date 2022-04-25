@@ -3,14 +3,14 @@ import { Button, Dialog } from "evergreen-ui";
 import QRCodeModal from "algorand-walletconnect-qrcode-modal";
 import "./App.css";
 import SiteHeader from "./components/SiteHeader";
-import { selectIsModalOpen, setIsModalOpen } from "./features/applicationSlice";
+import { setIsModalOpen } from "./features/applicationSlice";
 import SiteBody from "./components/SiteBody";
 import algowallet from "./assets/algorandwallet.svg";
 import { ConnectContext } from ".";
 import { useAppDispatch, useAppSelector } from "./store/hooks";
 
 const App: React.FC = () => {
-  const isModalOpen = useAppSelector(selectIsModalOpen);
+  const { isModalOpen } = useAppSelector((state) => state.application);
   const dispatch = useAppDispatch();
   const { connector } = useContext(ConnectContext);
 

@@ -5,19 +5,15 @@ const initialState = {
 };
 
 export const applicationSlice = createSlice({
-  name: 'application',
+  name: "application",
   initialState,
   reducers: {
     setIsModalOpen: (state, action) => {
       state.isModalOpen = action.payload;
-    }
-  }
+    },
+  },
 });
 
-export const selectIsModalOpen = (state: any) => state.application && state.application.isModalOpen;
-
-export const {
-  setIsModalOpen,
-} = applicationSlice.actions;
+export const { setIsModalOpen } = applicationSlice.actions;
 
 export default applicationSlice.reducer;

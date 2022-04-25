@@ -14,7 +14,17 @@ interface WalletConnectState {
 const initialState = {
   accounts: [],
   address: "",
-  assets: [],
+  assets: [
+    {
+      id: 0,
+      amount: "0",
+      creator: "",
+      frozen: false,
+      decimals: 6,
+      name: "Algo",
+      unitName: "Algo",
+    },
+  ],
   chain: ChainType.TestNet,
   fetching: false,
 } as WalletConnectState;
@@ -22,7 +32,7 @@ const initialState = {
 export const getAccountAssets = createAsyncThunk(
   "walletConnect/getAccountAssets",
   async ({ chain, address }: { chain: ChainType; address: string }) => {
-    return await apiGetAccountAssets(chain, address);    
+    return await apiGetAccountAssets(chain, address);
   },
 );
 

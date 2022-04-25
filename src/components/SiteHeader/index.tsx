@@ -68,7 +68,7 @@ const SiteHeader: React.FC = () => {
 
   useEffect(() => {
     // Check if connection is already established
-    if (connector && address && address.length > 0) {
+    if (connector && address?.length > 0) {
       console.log("chain: ", chain);
       dispatch(getAccountAssets({ chain, address }));
     }
