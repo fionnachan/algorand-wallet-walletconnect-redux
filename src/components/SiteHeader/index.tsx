@@ -86,7 +86,7 @@ const SiteHeader: React.FC = () => {
       unitName: "Algo",
     };
   }
-
+  
   return (
     <div className="site-layout-background site-header">
       <div className="site-header-inner">
@@ -94,7 +94,7 @@ const SiteHeader: React.FC = () => {
           <span>Connected to </span>
           <Select
             value={chain}
-            onChange={(event) => dispatch(switchChain((event.target as HTMLSelectElement).value))}
+            onChange={(event) => dispatch(switchChain(event.target.value as ChainType))}
           >
             <option value={ChainType.TestNet}>Testnet</option>
             <option value={ChainType.MainNet}>Mainnet</option>

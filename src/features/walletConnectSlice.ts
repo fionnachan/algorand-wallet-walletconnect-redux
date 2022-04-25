@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSelector, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { apiGetAccountAssets, ChainType } from "../helpers/api";
 import { IAssetData } from "../helpers/types";
 import { RootState } from "../store";
@@ -40,11 +40,11 @@ export const walletConnectSlice = createSlice({
   name: "walletConnect",
   initialState,
   reducers: {
-    switchChain(state, action) {
+    switchChain(state, action: PayloadAction<ChainType>) {
       state.chain = action.payload;
     },
     reset: (state) => ({ ...initialState, chain: state.chain }),
-    onSessionUpdate: (state, action) => {
+    onSessionUpdate: (state, action: PayloadAction<string[]>) => {
       state.accounts = action.payload;
       state.address = action.payload[0];
     },
