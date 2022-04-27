@@ -1,106 +1,70 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import WalletConnect from "@walletconnect/client";
-import QRCodeModal from "algorand-walletconnect-qrcode-modal";
+import { createAsyncThunk, createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { apiGetAccountAssets, ChainType } from "../helpers/api";
 import { IAssetData } from "../helpers/types";
+import { RootState } from "../store";
 
 interface WalletConnectState {
-  chain: ChainType,
-  accounts: string[],
-  address: string,
-  assets: IAssetData[],
-  connected: boolean,
-  connector: WalletConnect | null,
-  fetching: boolean,
+  chain: ChainType;
+  accounts: string[];
+  address: string;
+  assets: IAssetData[];
+  fetching: boolean;
 }
 
 const initialState = {
   accounts: [],
   address: "",
-  assets: [],
-  connected: false,
-  connector: null,
+  assets: [
+    {
+      id: 0,
+      amount: "0",
+      creator: "",
+      frozen: false,
+      decimals: 6,
+      name: "Algo",
+      unitName: "Algo",
+    },
+  ],
   chain: ChainType.TestNet,
   fetching: false,
 } as WalletConnectState;
 
-export const getAccountAssets = createAsyncThunk("walletConnect/getAccountAssets", async (accountData: {chain: ChainType, address: string}) => {
-  const { chain, address } = accountData;
-  const response = apiGetAccountAssets(chain, address)
-  return response;
-})
+export const getAccountAssets = createAsyncThunk(
+  "walletConnect/getAccountAssets",
+  async ({ chain, address }: { chain: ChainType; address: string }) => {
+    return await apiGetAccountAssets(chain, address);
+  },
+);
 
 export const walletConnectSlice = createSlice({
-    name: 'walletConnect',
-    initialState,
-    reducers: {
-      setFetching(state, action) {
-        console.log("setFetching: ", action.payload)
-        state.fetching = action.payload;
-      },
-      switchChain(state, action) {
-        console.log("switchChain chain: ", action.payload)
-        state.chain = action.payload;
-      },
-      reset: state => {
-        state.accounts = [];
-        state.address = "";
-        state.assets = [];
-        state.connected = false;
-        state.connector = null;
-        console.log("reset state", state)
-      },
-      walletConnectInit: state => {
-        // Create a connector
-        state.connector = new WalletConnect({
-          bridge: "https://bridge.walletconnect.org",
-          qrcodeModal: QRCodeModal,
-        });
-      },
-      setConnected: (state, action) => {
-        state.connected = action.payload;
-      },
-      onConnect: (state, action) =>  {
-        const { accounts } = action.payload.params[0];
-        state.accounts = accounts;
-        state.address = accounts[0];
-      },
-      onSessionUpdate: (state, action) => {
-        state.accounts = action.payload;
-        state.address = action.payload[0];
-      },
-      setAccountAssets: (state, action) => {
-        state.assets = action.payload;
-      },
-      killSession: state => {
-        if (state.connected) {
-          (state.connector as WalletConnect).killSession();
-        }
-      }
+  name: "walletConnect",
+  initialState,
+  reducers: {
+    switchChain(state, action: PayloadAction<ChainType>) {
+      state.chain = action.payload;
     },
-    extraReducers(builder) {
-      builder.addCase(getAccountAssets.fulfilled, (state, action) => {
-        state.assets = action.payload;
-      })
-    }
+    reset: (state) => ({ ...initialState, chain: state.chain }),
+    onSessionUpdate: (state, action: PayloadAction<string[]>) => {
+      state.accounts = action.payload;
+      state.address = action.payload[0];
+    },
+  },
+  extraReducers(builder) {
+    builder.addCase(getAccountAssets.fulfilled, (state, action) => {
+      state.fetching = false;
+      state.assets = action.payload;
+    });
+    builder.addCase(getAccountAssets.pending, (state) => {
+      state.fetching = true;
+    });
+  },
 });
 
-export const selectFetching = (state: any) => state.walletConnect && state.walletConnect.fetching;
-export const selectChain = (state: any) => state.walletConnect && state.walletConnect.chain;
-export const selectConnected = (state: any) => state.walletConnect && state.walletConnect.connected;
-export const selectConnector = (state: any) => state.walletConnect && state.walletConnect.connector;
-export const selectAssets = (state: any) => state.walletConnect && state.walletConnect.assets;
-export const selectAddress = (state: any) => state.walletConnect && state.walletConnect.address;
+export const selectAssets = createSelector(
+  (state: RootState) => state.walletConnect.assets,
+  (assets) => assets.map((a) => ({ ...a, amount: BigInt(a.amount) })),
+);
 
-export const {
-  setFetching,
-  switchChain,
-  reset,
-  walletConnectInit,
-  setConnected,
-  onConnect,
-  onSessionUpdate,
-  killSession
-} = walletConnectSlice.actions;
+export const { switchChain, reset, onSessionUpdate } = walletConnectSlice.actions;
 
 export default walletConnectSlice.reducer;

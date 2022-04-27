@@ -1,6 +1,6 @@
 export interface IAssetData {
     id: number;
-    amount: bigint;
+    amount: bigint | string;
     creator: string;
     frozen: boolean;
     decimals: number;
