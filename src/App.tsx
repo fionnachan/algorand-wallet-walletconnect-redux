@@ -6,8 +6,8 @@ import SiteHeader from "./components/SiteHeader";
 import { setIsModalOpen } from "./features/applicationSlice";
 import SiteBody from "./components/SiteBody";
 import algowallet from "./assets/algorandwallet.svg";
-import { ConnectContext } from ".";
 import { useAppDispatch, useAppSelector } from "./store/hooks";
+import { ConnectContext } from "./store/connector";
 
 const App: React.FC = () => {
   const { isModalOpen } = useAppSelector((state) => state.application);

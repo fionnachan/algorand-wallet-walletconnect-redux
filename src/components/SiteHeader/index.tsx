@@ -11,8 +11,8 @@ import {
 } from "../../features/walletConnectSlice";
 import { setIsModalOpen } from "../../features/applicationSlice";
 import { ChainType } from "../../helpers/api";
-import { ConnectContext } from "../..";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { ConnectContext } from "../../store/connector";
 
 const SiteHeader: React.FC = () => {
   const { fetching: loading, address, chain } = useAppSelector((state) => state.walletConnect);

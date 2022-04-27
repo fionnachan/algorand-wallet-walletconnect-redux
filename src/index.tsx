@@ -1,19 +1,11 @@
-import React, { createContext } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import store from "./store";
-import WalletConnect from "@walletconnect/client";
-import QRCodeModal from "algorand-walletconnect-qrcode-modal";
-
-const connectProps = {
-  bridge: "https://bridge.walletconnect.org",
-  qrcodeModal: QRCodeModal,
-};
-const connector = new WalletConnect(connectProps);
-export const ConnectContext = createContext(connector);
+import { ConnectContext, connector } from "./store/connector";
 
 const renderApp = () =>
   ReactDOM.render(
